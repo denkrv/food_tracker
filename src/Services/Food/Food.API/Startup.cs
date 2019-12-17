@@ -36,6 +36,7 @@ namespace Food.API
             services.AddMediatR(typeof(IngridientsHandler).Assembly);
 
             services.AddControllers();
+            services.AddSwagger();
 
             services.AddCors(options =>
             {
@@ -47,6 +48,9 @@ namespace Food.API
                         .AllowCredentials());
             });
         }
+
+       
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -64,12 +68,22 @@ namespace Food.API
 
             app.UseAuthorization();
 
+            app.UseSwagger()
+                .UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Food.API V1");
+                    c.RoutePrefix = string.Empty;
+                });
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     "default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+
         }
     }
 }
